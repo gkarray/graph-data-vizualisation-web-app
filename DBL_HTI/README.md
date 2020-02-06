@@ -1,3 +1,5 @@
+This project was done in collaboration with [RinseV](https://github.com/RinseV), [PackmanShit](https://github.com/PackmanShit), [MrKietho](https://github.com/MrKietho), [sabastiaan](https://github.com/sabastiaan), [Vasil-VIS](https://github.com/Vasil-VIS).
+
 # GraphViz
 
 Repo for the GraphViz website (https://dbl-hti.cyanworks.nl/).
