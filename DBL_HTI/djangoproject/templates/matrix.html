@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block javascript %}
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- <script src="{% static "graphCanvas.js" %} "></script>
+    <script src="{% static "graphCanvasRadial.js" %}"></script>
+    <script src="{% static "graphCanvasArc.js" %}"></script>
+    <script src="{% static "graph.js" %} "></script> -->
+    <!-- <script src="{% static "lib/science.v1.js" %} "></script>
+    <script src="{% static "lib/tiny-queue.js" %} "></script>
+    <script src="{% static "lib/reorder.v1.js" %} "></script>
+    <script src="{% static "lib/table.js" %} "></script> -->
+    <script src="{% static "lib/reimg.js" %} "></script>
+    <script src="{% static "matrixCanvasAlternative.js" %} "></script>
+    <!-- <script src="{% static "d3-adjacency-matrix-layout.js" %} "></script> -->
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js'></script>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    <script>
+        // nodelink_canvas_data_location = "{% static jsonFile.Data.name %}";
+        // nodelink_data = "{% static jsonFile.Data.name %}";
+        matrixFileName = "{{ jsonFile.Name }}";
+    </script>
+    <script>
+        document.title = "GraphViz - " + matrixFileName + " - Matrix"
+    </script>
+    <script>
+        matrixDataLocation = "{% static jsonFile.Data.name %}";
+        drawMatrixCanvas();
+    </script>
+{% endblock %}
+
+{% block content %}
+
+<div class="pb-2 mt-4 mb-2 border-bottom">
+    <div class="text-center" >
+        <h1>
+            {{ jsonFile.Name}}
+        </h1>
+    </div>
+</div>
+    <div id='border'>
+        <!-- <div id="matrixContent"> -->
+        <div class="header">
+            <h1>Adjacency matrix</h1>
+            <a data-toggle="modal" data-target="#matrixModal"><i class="fas fa-info-circle"></i></a>
+        </div>
+
+        <div id="matrixModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="matrixInfoModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <img src="{% static "InstructionMatrix.png" %}" class="rounded">
+                </div>
+            </div>
+        </div>
+
+        <div id="matrixButtons">
+            <div id = 'btns' role="group">
+                <button type="button" class="btn btn-primary" onclick="enableMatrix()">Enable</button>
+                <button type="button" class="btn btn-danger" onclick="disableMatrix()">Disable</button>
+                <button type="button" class="btn btn-red disabledOnDisable" onclick="reset_zoom()">Reset</button>
+                <button type="button" class="btn btn-white disabledOnDisable" onclick="downloadMatrix()">Download</button>
+            </div>
+            <br>
+
+            <div id="matrixOrderings" role="group">
+                <button type="button" class="btn btn-primary btn-sm" onclick="initial_order()">Initial Order
+                </button>
+                <button type="button" class="btn btn-green btn-sm" onclick="random_order()">Random Order
+                </button>
+                <button type="button" class="btn btn-orange btn-sm" onclick="sum_order()">Weight sum Order
+                </button>
+                <button type="button" class="btn btn-purple btn-sm" onclick="reversecuthillmckee_order()">Reverse Cuthill-McKee Order
+                </button>
+                <!-- <button type="button" class="btn btn-cyan btn-sm" onclick="cuthillmckee_order()">Cuthill-McKee Order
+                </button> -->
+                <button type="button" class="btn btn-cyan btn-sm" onclick="shortestpath_order()">Shortest path Order
+                </button>
+                <button type="button" class="btn btn-pink btn-sm" onclick="uniquevalues_order()">Unique values Order
+                </button>
+                <button type="button" class="btn btn-dark btn-sm" onclick="meanvalues_order()">Mean values Order
+                </button>
+            </div>
+        </div>
+        <!-- </div> -->
+
+        <!-- <div id='matrix_1'> -->
+        <div id="matrixControls">
+            <!-- <input type="range" id="scalar" min="1" max="3" value="1" step="1" onchange="drawMatrixCanvas()">-->
+            <select id="alternateColor" onchange="drawMatrixCanvas()" selected="magma">
+                <option value="magma">Magma</option>
+                <option value="viridis">Viridis</option>
+                <option value="warm">Warm</option>
+                <option value="cool">Cool</option>
+                <option value="cubehelix">Cubehelix</option>
+                <option value="rainbow">Rainbow</option>
+            </select>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="enabledHighlight" onchange="enableHighlight()" value="false" value="OFF"/>
+                <label class="custom-control-label" for="enabledHighlight">Enable matrix highlighting (May lower performance) </label>
+            </div>
+        </div>
+        <div id="matrixInfo"></div>
+        <!-- </div> -->
+    </div>
+    <div id="matrixCntnr">
+        <div id="matrixCanvasContainer">
+            <canvas id="matrixCanvas"></canvas>
+        </div>
+    </div>
+{% endblock %}

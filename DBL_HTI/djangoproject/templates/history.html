@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+<div class="pb-2 mt-4 mb-2 border-bottom">
+    <div class="text-center" >
+        <h1>
+            List of data sets
+        </h1>
+    </div>
+</div>
+<div>
+    <table id="historyTable" class="table table-striped table-bordered">
+        <thead>
+            <th>Name</th>
+            <th>Upload date</th>
+            <th>Edges</th>
+            <th>Nodes</th>
+            <th>Density</th>
+            <th>View</th>
+        </thead>
+        <tbody>
+
+{% for file in fileList %}
+   <tr>
+       <td><a href="{% url 'visual' pk=file.id %}" >{{ file.Name }}</a></td>
+       <td>{{ file.Date }}</td>
+       <td>{{ file.EdgeCount }}</td>
+       <td>{{ file.NodeCount }}</td>
+       <td>{{ file.GraphDensity }}</td>
+       <td>
+            <div class="float-right">
+                <a href="{% url 'matrix' pk=file.id %}" class="btn btn-red">matrix</a></li>
+                <a href="{% url 'node-link' pk=file.id %}" class="btn btn-blue">node-link</a></li>
+                <a href="{% url 'visual' pk=file.id %}" class="btn btn-green">view both</a></li>
+            </div>
+       </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+    {% block javascript %}
+
+    <script>
+$(document).ready(function() {
+    $('#historyTable').DataTable({
+         // paging:         false,
+         columnDefs: [
+            {
+                targets: [1,2,3,4,5],
+                className: 'dt-body-right',
+                lengthMenu: [ [2, 4, 8, -1], [2, 4, 8, "All"] ],
+                   pageLength: 4
+            }
+        ]
+    });
+});
+    </script>
+    <script>
+        document.title = "GraphViz - History";
+    </script>
+
+
+    {% endblock %}
